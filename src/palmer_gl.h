@@ -14,6 +14,8 @@
 //    GNU General Public License for more details.                          //
 /****************************************************************************/
 
+#pragma once
+
 #include "palmer.h"
 
 void gl_init();

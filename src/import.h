@@ -14,5 +14,7 @@
 //    GNU General Public License for more details.                          //
 /****************************************************************************/
 
+#pragma once
+
 bool import_png(char *name, bool fullpath);
 void write_imported_layers(char *name, bool fullpath);

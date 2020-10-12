@@ -14,6 +14,8 @@
 //    GNU General Public License for more details.                          //
 /****************************************************************************/
 
+#pragma once
+
 #include "palmer.h"
 
 bool write_png(char *filename, uint32_t width, uint32_t height, char *data);

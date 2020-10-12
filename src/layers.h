@@ -14,11 +14,8 @@
 //    GNU General Public License for more details.                          //
 /****************************************************************************/
 
-#ifndef _LAYERS_H_
-#define _LAYERS_H_
+#pragma once
 
 #include "palmer.h"
 
 void read_layers(uint32_t iterator, uint32_t size);
-
-#endif

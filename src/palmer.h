@@ -14,8 +14,7 @@
 //    GNU General Public License for more details.                          //
 /****************************************************************************/
 
-#ifndef _PALMER_H_
-#define _PALMER_H_
+#pragma once
 
 #include <cstdint>
 #include <sstream>
@@ -143,5 +142,3 @@ struct field_state
 extern struct field_state state;
 
 extern volatile bool dialog;
-
-#endif

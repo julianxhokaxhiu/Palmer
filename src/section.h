@@ -14,6 +14,8 @@
 //    GNU General Public License for more details.                          //
 /****************************************************************************/
 
+#pragma once
+
 #include "palmer.h"
 
 void section_read_bytes(uint32_t *iterator, void *dest, uint32_t bytes);

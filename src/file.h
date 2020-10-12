@@ -14,4 +14,6 @@
 //    GNU General Public License for more details.                          //
 /****************************************************************************/
 
+#pragma once
+
 void read_field_file(char *file);
