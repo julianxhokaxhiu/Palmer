@@ -68,7 +68,7 @@ uint32_t unpack_lzs(uint32_t source, uint32_t dest, uint32_t real_source_end)
 
 	if(source_end > real_source_end)
 	{
-		MessageBoxA(0, "LZS decompression would overflow, not doing that.", "Error", 0);
+		MessageBoxA(0, "LZS decompression would overflow, not doing that.", "Error", MB_ICONERROR | MB_OK);
 		return 0;
 	}
 
@@ -128,7 +128,7 @@ void parse_field_file(void *buffer, uint32_t buffer_end)
 
 	if(section3_iterator < (uint32_t)buffer || section3_iterator > buffer_end || section8_iterator < (uint32_t)buffer || section8_iterator > buffer_end)
 	{
-		MessageBoxA(0, "Bad sections, not going to read this file.", "Error", 0);
+		MessageBoxA(0, "Bad sections, not going to read this file.", "Error", MB_ICONERROR | MB_OK);
 		return;
 	}
 
@@ -137,7 +137,7 @@ void parse_field_file(void *buffer, uint32_t buffer_end)
 
 	if(section3_iterator + section3_size - 4 > buffer_end || section8_iterator + section8_size - 4 > buffer_end)
 	{
-		MessageBoxA(0, "Bad sections, not going to read this file.", "Error", 0);
+		MessageBoxA(0, "Bad sections, not going to read this file.", "Error", MB_ICONERROR | MB_OK);
 		return;
 	}
 
@@ -178,7 +178,7 @@ void read_field_file(char *file)
 
 	if(stat(file, &s))
 	{
-		MessageBoxA(0, "Couldn't find file!", "Error", 0);
+		MessageBoxA(0, "Couldn't find file!", "Error", MB_ICONERROR | MB_OK);
 		return;
 	}
 
@@ -186,7 +186,7 @@ void read_field_file(char *file)
 
 	if(size > 0x2000000)
 	{
-		MessageBoxA(0, "Cowardly refusing to open file larger than 32MB.", "Error", 0);
+		MessageBoxA(0, "Cowardly refusing to open file larger than 32MB.", "Error", MB_ICONERROR | MB_OK);
 		return;
 	}
 
@@ -194,7 +194,7 @@ void read_field_file(char *file)
 
 	if(!f)
 	{
-		MessageBoxA(0, "Couldn't open file!", "Error", 0);
+		MessageBoxA(0, "Couldn't open file!", "Error", MB_ICONERROR | MB_OK);
 		return;
 	}
 

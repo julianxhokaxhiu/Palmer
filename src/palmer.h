@@ -17,7 +17,8 @@
 #ifndef _PALMER_H_
 #define _PALMER_H_
 
-#include <stdint.h>
+#include <cstdint>
+#include <sstream>
 #include <windows.h>
 #include <gl/gl.h>
 #include <stdlib.h>

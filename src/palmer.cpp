@@ -155,15 +155,15 @@ void main_menu_cb(int entry)
 
 				state.current_layer = 0;
 				gl_render_scene();
-				if(!import_png(ofn.lpstrFile, true)) MessageBoxA(0, "Import failed. (Normal layer)", "Error", 0);
+				if(!import_png(ofn.lpstrFile, true)) MessageBoxA(0, "Import failed. (Normal layer)", "Error", MB_ICONERROR | MB_OK);
 
 				state.current_layer = 1;
 				gl_render_scene();
-				if(!import_png(ofn.lpstrFile, true)) MessageBoxA(0, "Import failed. (Parallax background layer)", "Error", 0);
+				if(!import_png(ofn.lpstrFile, true)) MessageBoxA(0, "Import failed. (Parallax background layer)", "Error", MB_ICONERROR | MB_OK);
 
 				state.current_layer = 2;
 				gl_render_scene();
-				if(!import_png(ofn.lpstrFile, true)) MessageBoxA(0, "Import failed. (Parallax foreground layer)", "Error", 0);
+				if(!import_png(ofn.lpstrFile, true)) MessageBoxA(0, "Import failed. (Parallax foreground layer)", "Error", MB_ICONERROR | MB_OK);
 
 				state.current_layer = saved_layer;
 			}
@@ -210,8 +210,11 @@ void main_menu_cb(int entry)
 					gl_render_scene();
 					if(!export_png(__argv[i], false))
 					{
-						MessageBoxA(0, "Export failed. (Normal layer)", "Error", 0);
-						MessageBoxA(0, __argv[i], "Batch item failed", 0);
+						std::ostringstream tmp;
+
+						tmp << "Export failed for " << __argv[i] << ". (Normal layer)";
+
+						MessageBoxA(0, tmp.str().c_str(), "Error", MB_ICONERROR | MB_OK);
 						break;
 					}
 
@@ -219,8 +222,11 @@ void main_menu_cb(int entry)
 					gl_render_scene();
 					if(!export_png(__argv[i], false))
 					{
-						MessageBoxA(0, "Export failed. (Parallax background layer)", "Error", 0);
-						MessageBoxA(0, __argv[i], "Batch item failed", 0);
+						std::ostringstream tmp;
+
+						tmp << "Export failed for " << __argv[i] << ". (Parallax background layer)";
+
+						MessageBoxA(0, tmp.str().c_str(), "Error", MB_ICONERROR | MB_OK);
 						break;
 					}
 
@@ -228,8 +234,11 @@ void main_menu_cb(int entry)
 					gl_render_scene();
 					if(!export_png(__argv[i], false))
 					{
-						MessageBoxA(0, "Export failed. (Parallax foreground layer)", "Error", 0);
-						MessageBoxA(0, __argv[i], "Batch item failed", 0);
+						std::ostringstream tmp;
+
+						tmp << "Export failed for " << __argv[i] << ". (Parallax foreground layer)";
+
+						MessageBoxA(0, tmp.str().c_str(), "Error", MB_ICONERROR | MB_OK);
 						break;
 					}
 
@@ -239,7 +248,7 @@ void main_menu_cb(int entry)
 				}
 			}
 
-			if(__argc == 1) MessageBoxA(0, "No filenames specified on command line", "Error", 0);
+			if(__argc == 1) MessageBoxA(0, "No filenames specified on command line", "Error", MB_ICONERROR | MB_OK);
 
 			dialog = false;
 			break;
@@ -257,8 +266,11 @@ void main_menu_cb(int entry)
 					gl_render_scene();
 					if(!import_png(__argv[i], false))
 					{
-						MessageBoxA(0, "Import failed. (Normal layer)", "Error", 0);
-						MessageBoxA(0, __argv[i], "Batch item failed", 0);
+						std::ostringstream tmp;
+
+						tmp << "Export failed for " << __argv[i] << ". (Normal layer)";
+
+						MessageBoxA(0, tmp.str().c_str(), "Error", MB_ICONERROR | MB_OK);
 						break;
 					}
 
@@ -268,8 +280,11 @@ void main_menu_cb(int entry)
 					gl_render_scene();
 					if(!import_png(__argv[i], false))
 					{
-						MessageBoxA(0, "Import failed. (Parallax background layer)", "Error", 0);
-						MessageBoxA(0, __argv[i], "Batch item failed", 0);
+						std::ostringstream tmp;
+
+						tmp << "Export failed for " << __argv[i] << ". (Parallax background layer)";
+
+						MessageBoxA(0, tmp.str().c_str(), "Error", MB_ICONERROR | MB_OK);
 						break;
 					}
 
@@ -279,8 +294,11 @@ void main_menu_cb(int entry)
 					gl_render_scene();
 					if(!import_png(__argv[i], false))
 					{
-						MessageBoxA(0, "Import failed. (Parallax foreground layer)", "Error", 0);
-						MessageBoxA(0, __argv[i], "Batch item failed", 0);
+						std::ostringstream tmp;
+
+						tmp << "Export failed for " << __argv[i] << ". (Parallax foreground layer)";
+
+						MessageBoxA(0, tmp.str().c_str(), "Error", MB_ICONERROR | MB_OK);
 						break;
 					}
 
@@ -290,7 +308,7 @@ void main_menu_cb(int entry)
 				}
 			}
 
-			if(__argc == 1) MessageBoxA(0, "No filenames specified on command line", "Error", 0);
+			if(__argc == 1) MessageBoxA(0, "No filenames specified on command line", "Error", MB_ICONERROR | MB_OK);
 
 			dialog = false;
 			break;
@@ -332,7 +350,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	if(!glewIsSupported("GL_VERSION_1_2"))
 	{
 		no_blend_equation = true;
-		MessageBoxA(0, "No support for subtractive blending, some effects will be missing.", "Warning", 0);
+		MessageBoxA(0, "No support for subtractive blending, some effects will be missing.", "Warning", MB_ICONWARNING | MB_OK);
 	}
 
 	glutMainLoop();

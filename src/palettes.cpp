@@ -50,7 +50,7 @@ void read_palettes(uint32_t iterator, uint32_t size)
 	if(iterator == section_end) state.palettes_ok = true;
 	else
 	{
-		MessageBoxA(0, "Read past end of palette section.", "Error", 0);
+		MessageBoxA(0, "Read past end of palette section.", "Error", MB_ICONERROR | MB_OK);
 		state.palettes_ok = false;
 	}
 }

@@ -207,8 +207,10 @@ bool export_png(char *name, bool fullpath)
 
 		if(!write_png(filename, width, height, (char *)pixels))
 		{
-			MessageBoxA(0, "Couldn't write PNG.", "Error", 0);
-			MessageBoxA(0, filename, "Error", 0);
+			std::ostringstream tmp;
+			tmp << "Couldn't write PNG: " << filename;
+
+			MessageBoxA(0, tmp.str().c_str(), "Error", MB_ICONERROR | MB_OK);
 			free(pixels);
 			return false;
 		}

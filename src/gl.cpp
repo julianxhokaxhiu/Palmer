@@ -74,7 +74,7 @@ void export_tile(struct layer_tile *tile, int size, uint32_t layer)
 		}
 	}
 
-	MessageBoxA(0, "Overflow", "Error", 0);
+	MessageBoxA(0, "Overflow", "Error", MB_ICONERROR | MB_OK);
 }
 
 void render_layer(struct layer_tile *tiles, uint32_t num, uint32_t tile_size, uint32_t layer)
@@ -123,12 +123,12 @@ void render_layer(struct layer_tile *tiles, uint32_t num, uint32_t tile_size, ui
 						glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
 						glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 						glDepthMask(GL_FALSE);
-						if(layer < 3 && state.layers[page].type == 1 && page < 0x18) MessageBoxA(0, "Wrong page for blend mode 0\n", "Glitch", 0);
+						if(layer < 3 && state.layers[page].type == 1 && page < 0x18) MessageBoxA(0, "Wrong page for blend mode 0\n", "Glitch", MB_ICONWARNING | MB_OK);
 						break;
 					case 1:
 						glBlendFunc(GL_ONE, GL_ONE);
 						glDepthMask(GL_FALSE);
-						if(layer < 3 && state.layers[page].type == 1 && page < 0xF || page >= 0x18) MessageBoxA(0, "Wrong page for blend mode 1\n", "Glitch", 0);
+						if(layer < 3 && state.layers[page].type == 1 && page < 0xF || page >= 0x18) MessageBoxA(0, "Wrong page for blend mode 1\n", "Glitch", MB_ICONWARNING | MB_OK);
 						break;
 					case 2:
 						if(!no_blend_equation) glBlendEquation(GL_FUNC_REVERSE_SUBTRACT);
@@ -141,7 +141,7 @@ void render_layer(struct layer_tile *tiles, uint32_t num, uint32_t tile_size, ui
 						glDepthMask(GL_FALSE);
 						break;
 					default:
-						MessageBoxA(0, "Unknown blend mode\n", "Glitch", 0);
+						MessageBoxA(0, "Unknown blend mode\n", "Glitch", MB_ICONWARNING | MB_OK);
 				}
 			}
 			else if(pass == 1) continue;

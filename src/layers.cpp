@@ -85,7 +85,7 @@ void read_layers(uint32_t iterator, uint32_t size)
 
 	section_read_bytes(&iterator, &header, sizeof(header));
 
-	if(!header.layer1_present) MessageBoxA(0, "Layer 1 not present!", "Error", 0);
+	if(!header.layer1_present) MessageBoxA(0, "Layer 1 not present!", "Error", MB_ICONERROR | MB_OK);
 
 	state.layer1_width = header.width;
 	state.layer1_height = header.height;
@@ -214,14 +214,14 @@ void read_layers(uint32_t iterator, uint32_t size)
 
 	free(tmp);
 
-	if(strncmp("END", (char *)iterator, 3)) MessageBoxA(0, "Didn't hit end tag in background section.", "Warning", 0);
+	if(strncmp("END", (char *)iterator, 3)) MessageBoxA(0, "Didn't hit end tag in background section.", "Warning", MB_ICONWARNING | MB_OK);
 
 	iterator += 3;
 
 	if(iterator == section_end) state.layers_ok = true;
 	else
 	{
-		MessageBoxA(0, "Read past end of background section.", "Error", 0);
+		MessageBoxA(0, "Read past end of background section.", "Error", MB_ICONERROR | MB_OK);
 		state.layers_ok = false;
 	}
 }

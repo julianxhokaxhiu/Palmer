@@ -140,11 +140,10 @@ bool import_png(char *name, bool fullpath)
 
 		if(!(pixels = (uint32_t *)read_png(filename, &width, &height)))
 		{
-			char tmp[4096];
+			std::ostringstream tmp;
+			tmp << "Missing image: " << filename;
 
-			sprintf(tmp, "Missing image: %s.", filename);
-
-			MessageBoxA(0, tmp, "Error", 0);
+			MessageBoxA(0, tmp.str().c_str(), "Error", MB_ICONERROR | MB_OK);
 
 			return false;
 		}
@@ -168,11 +167,11 @@ bool import_png(char *name, bool fullpath)
 
 		if((tilefact_x * org_width != width) || (tilefact_y * org_height != height))
 		{
-			char tmp[4096];
+			std::ostringstream tmp;
 
-			sprintf(tmp, "Imported image \"%s\" is %ix%i pixels, expected %ix%i.", filename, width, height, tilefact_x * org_width, tilefact_y * org_height);
+			tmp << "Imported image \"" << filename << "\" is " << width << "x" << height << "pixels, expected " << tilefact_x * org_width << "x" << tilefact_y * org_height << ".";
 
-			MessageBoxA(0, tmp, "Error", 0);
+			MessageBoxA(0, tmp.str().c_str(), "Error", MB_ICONERROR | MB_OK);
 
 			return false;
 		}
@@ -203,7 +202,7 @@ bool import_png(char *name, bool fullpath)
 
 				if(state.layers[page].imported_width != 256 * tilefact_x || state.layers[page].imported_height != 256 * tilefact_y)
 				{
-					MessageBoxA(0, "Imported data conflicts with previous import.\nRe-open field file to clear all imports.", "Error", 0);
+					MessageBoxA(0, "Imported data conflicts with previous import.\nRe-open field file to clear all imports.", "Error", MB_ICONERROR | MB_OK);
 					continue;
 				}
 
@@ -238,7 +237,6 @@ bool import_png(char *name, bool fullpath)
 void write_imported_layers(char *name, bool fullpath)
 {
 	uint32_t i;
-	char tmp[1024];
 	char drive[_MAX_DRIVE];
 	char dir[_MAX_DIR];
 	bool found_imported_layer = false;
@@ -271,8 +269,10 @@ void write_imported_layers(char *name, bool fullpath)
 		}
 	}
 
-	if(!found_imported_layer) sprintf(tmp, "You haven't imported anything yet");
-	else sprintf(tmp, "Place PNG files in mods/<modpath>/field/%s/", state.name);
+	std::ostringstream tmp;
 
-	if(fullpath) MessageBoxA(0, tmp, "", 0);
+	if(!found_imported_layer) tmp << "You haven't imported anything yet";
+	else tmp << "Place PNG files in mods/<modpath>/field/" << state.name << "/";
+
+	if(fullpath) MessageBoxA(0, tmp.str().c_str(), "Warning", MB_ICONWARNING | MB_OK);
 }
