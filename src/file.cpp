@@ -132,8 +132,8 @@ void parse_field_file(void *buffer, uint32_t buffer_end)
 		return;
 	}
 
-	section3_size = section_read_dword(&section3_iterator);
-	section8_size = section_read_dword(&section8_iterator);
+	section3_size = section_read<uint32_t>(&section3_iterator);
+	section8_size = section_read<uint32_t>(&section8_iterator);
 
 	if(section3_iterator + section3_size - 4 > buffer_end || section8_iterator + section8_size - 4 > buffer_end)
 	{

@@ -95,7 +95,7 @@ void read_layers(uint32_t iterator, uint32_t size)
 	state.layer1_tiles = (struct layer_tile *)iterator;
 	iterator += state.layer1_tiles_num * sizeof(*state.layer1_tiles);
 
-	state.layer2_present = section_read_byte(&iterator);
+	state.layer2_present = section_read<uint8_t>(&iterator);
 
 	if(state.layer2_present)
 	{
@@ -108,7 +108,7 @@ void read_layers(uint32_t iterator, uint32_t size)
 	}
 	else state.layer2_tiles_num = 0;
 
-	state.layer3_present = section_read_byte(&iterator);
+	state.layer3_present = section_read<uint8_t>(&iterator);
 
 	if(state.layer3_present)
 	{
@@ -126,7 +126,7 @@ void read_layers(uint32_t iterator, uint32_t size)
 		state.parallax_back = false;
 	}
 
-	state.layer4_present = section_read_byte(&iterator);
+	state.layer4_present = section_read<uint8_t>(&iterator);
 
 	if(state.layer4_present)
 	{
@@ -150,12 +150,12 @@ void read_layers(uint32_t iterator, uint32_t size)
 
 	for(i = 0; i < 42; i++)
 	{
-		state.layers[i].present = section_read_word(&iterator);
+		state.layers[i].present = section_read<uint16_t>(&iterator);
 
 		if(!state.layers[i].present) continue;
 
-		state.layers[i].unknown1 = section_read_word(&iterator);
-		state.layers[i].type = section_read_word(&iterator);
+		state.layers[i].unknown1 = section_read<uint16_t>(&iterator);
+		state.layers[i].type = section_read<uint16_t>(&iterator);
 
 		if(state.layers[i].type == 1)
 		{

@@ -16,7 +16,14 @@
 
 #include "palmer.h"
 
-uint8_t section_read_byte(uint32_t *iterator);
-uint16_t section_read_word(uint32_t *iterator);
-uint32_t section_read_dword(uint32_t *iterator);
 void section_read_bytes(uint32_t *iterator, void *dest, uint32_t bytes);
+
+template <class T>
+T section_read(uint32_t *iterator)
+{
+  T ret;
+
+  section_read_bytes(iterator, &ret, sizeof(ret));
+
+  return ret;
+}
