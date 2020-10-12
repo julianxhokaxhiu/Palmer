@@ -317,7 +317,7 @@ void main_menu_cb(int entry)
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	RegOpenKeyEx(HKEY_LOCAL_MACHINE, "SOFTWARE\\Square Soft, Inc.\\Final Fantasy VII", 0, KEY_QUERY_VALUE, &ff7_regkey);
+	RegOpenKeyEx(HKEY_LOCAL_MACHINE, R"(SOFTWARE\Square Soft, Inc.\Final Fantasy VII)", 0, KEY_QUERY_VALUE | KEY_WOW64_32KEY, &ff7_regkey);
 	RegQueryValueEx(ff7_regkey, "AppPath", 0, 0, (LPBYTE)basedir, &basedir_length);
 	basedir[sizeof(basedir) - 1] = 0;
 
