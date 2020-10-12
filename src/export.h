@@ -16,5 +16,5 @@
 
 #include "palmer.h"
 
-bool write_png(char *filename, uint width, uint height, char *data);
+bool write_png(char *filename, uint32_t width, uint32_t height, char *data);
 bool export_png(char *name, bool fullpath);

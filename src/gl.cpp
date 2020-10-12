@@ -40,11 +40,11 @@ void gl_init()
 	glClearDepth(1.0f);
 }
 
-void export_tile(struct layer_tile *tile, int size, uint layer)
+void export_tile(struct layer_tile *tile, int size, uint32_t layer)
 {
 	int tile_x, tile_y;
 	int x, y;
-	uint i = 0;
+	uint32_t i = 0;
 
 	tile_x = tile->x + abs(tile->x % 16);
 	tile_y = tile->y + abs(tile->y % 16);
@@ -61,7 +61,7 @@ void export_tile(struct layer_tile *tile, int size, uint layer)
 
 	for(; i < EXPORT_LAYERS; i++)
 	{
-		if(!state.export_layers[i]) state.export_layers[i] = calloc(128 * 128, sizeof(*state.export_layers));
+		if(!state.export_layers[i]) state.export_layers[i] = (layer_tile**)calloc(128 * 128, sizeof(*state.export_layers));
 
 		if(!state.export_layers[i][x * 128 + y])
 		{
@@ -77,9 +77,9 @@ void export_tile(struct layer_tile *tile, int size, uint layer)
 	MessageBoxA(0, "Overflow", "Error", 0);
 }
 
-void render_layer(struct layer_tile *tiles, uint num, uint tile_size, uint layer)
+void render_layer(struct layer_tile *tiles, uint32_t num, uint32_t tile_size, uint32_t layer)
 {
-	uint pass, i;
+	uint32_t pass, i;
 
 	state.export_tile_size = tile_size;
 
@@ -96,7 +96,7 @@ void render_layer(struct layer_tile *tiles, uint num, uint tile_size, uint layer
 			float u2 = (tile->source_x + tile_size) / 256.0f;
 			float v1 = tile->source_y / 256.0f;
 			float v2 = (tile->source_y + tile_size) / 256.0f;
-			uint page = tile->source_page;
+			uint32_t page = tile->source_page;
 			float z;
 
 			if(!no_blend_equation) glBlendEquation(GL_FUNC_ADD);
@@ -181,7 +181,7 @@ void render_layer(struct layer_tile *tiles, uint num, uint tile_size, uint layer
 
 void gl_render_scene()
 {
-	uint i;
+	uint32_t i;
 
 	if(!state.first_pass_done)
 	{

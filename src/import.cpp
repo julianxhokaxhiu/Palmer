@@ -21,17 +21,17 @@
 #include "palmer.h"
 #include "export.h"
 
-uint *read_png(char *filename, uint *_width, uint *_height)
+uint32_t *read_png(char *filename, uint32_t *_width, uint32_t *_height)
 {
 	png_bytepp rowptrs;
 	FILE *f;
 	png_infop info_ptr;
 	png_structp png_ptr;
-	uint width;
-	uint height;
-	uint *data;
-	uint y;
-	uint color_type;
+	uint32_t width;
+	uint32_t height;
+	uint32_t *data;
+	uint32_t y;
+	uint32_t color_type;
 
 	if(fopen_s(&f, filename, "rb")) return 0;
 
@@ -69,21 +69,21 @@ uint *read_png(char *filename, uint *_width, uint *_height)
 	height = png_get_image_height(png_ptr, info_ptr);
 	*_height = height;
 
-	data = malloc(width * height * 4);
+	data = (uint32_t*)malloc(width * height * 4);
 
 	if(color_type == PNG_COLOR_TYPE_RGB)
 	{
-		uint x;
+		uint32_t x;
 
 		for(y = 0; y < height; y++)
 		{
-			uint o = (uint)rowptrs[y];
+			uint32_t o = (uint32_t)rowptrs[y];
 
 			for(x = 0; x < width; x++)
 			{
-				uint r = (*(unsigned char *)o++);
-				uint g = (*(unsigned char *)o++);
-				uint b = (*(unsigned char *)o++);
+				uint32_t r = (*(uint8_t *)o++);
+				uint32_t g = (*(uint8_t *)o++);
+				uint32_t b = (*(uint8_t *)o++);
 
 				data[y * width + x] = r | g << 8 | b << 16 | 0xFF000000;
 			}
@@ -103,7 +103,7 @@ bool import_png(char *name, bool fullpath)
 {
 	int i, j, k, l, m;
 	int extents[4];
-	int width, height;
+	uint32_t width, height;
 	int org_width, org_height;
 	int tilefact_x = 0;
 	int tilefact_y = 0;
@@ -130,7 +130,7 @@ bool import_png(char *name, bool fullpath)
 
 	for(i = 0; i < EXPORT_LAYERS; i++)
 	{
-		uint *pixels;
+		uint32_t *pixels;
 		char filename[4096];
 
 		if(!state.export_layers[i]) continue;
@@ -138,7 +138,7 @@ bool import_png(char *name, bool fullpath)
 		if(fullpath) sprintf(filename, "%s/%s/%s_%i_%08i.png", drive, dir, state.name, state.current_layer, i);
 		else sprintf(filename, "%s_batch/%s_%i_%08i.png", state.name, state.name, state.current_layer, i);
 
-		if(!(pixels = (uint *)read_png(filename, &width, &height)))
+		if(!(pixels = (uint32_t *)read_png(filename, &width, &height)))
 		{
 			char tmp[4096];
 
@@ -181,10 +181,10 @@ bool import_png(char *name, bool fullpath)
 		{
 			for(k = 0; k < height / (16 * tilefact_y); k++)
 			{
-				uint x = 64 + (j * 16 + extents[0]) / 16;
-				uint y = 64 + (k * 16 + extents[2]) / 16;
+				uint32_t x = 64 + (j * 16 + extents[0]) / 16;
+				uint32_t y = 64 + (k * 16 + extents[2]) / 16;
 				struct layer_tile *tile = state.export_layers[i][x * 128 + y];
-				uint page, src_x, src_y;
+				uint32_t page, src_x, src_y;
 
 				if(!tile) continue;
 
@@ -211,9 +211,9 @@ bool import_png(char *name, bool fullpath)
 				{
 					for(m = 0; m < state.export_tile_size * tilefact_y; m++)
 					{
-						uint color = pixels[j * (16 * tilefact_x) + l + (k * (16 * tilefact_y) + m) * width];
+						uint32_t color = pixels[j * (16 * tilefact_x) + l + (k * (16 * tilefact_y) + m) * width];
 
-						if(!state.layers[page].imported_data) state.layers[page].imported_data = calloc(256 * tilefact_x * 256 * tilefact_y, 4);
+						if(!state.layers[page].imported_data) state.layers[page].imported_data = (uint32_t*)calloc(256 * tilefact_x * 256 * tilefact_y, 4);
 						state.layers[page].imported_data[(src_x * tilefact_x) + l + ((src_y * tilefact_y) + m) * (256 * tilefact_y)] = color;
 					}
 				}
@@ -237,7 +237,7 @@ bool import_png(char *name, bool fullpath)
 
 void write_imported_layers(char *name, bool fullpath)
 {
-	uint i;
+	uint32_t i;
 	char tmp[1024];
 	char drive[_MAX_DRIVE];
 	char dir[_MAX_DIR];
@@ -247,8 +247,8 @@ void write_imported_layers(char *name, bool fullpath)
 
 	for(i = 0; i < FF7_LAYERS; i++)
 	{
-		uint width = state.layers[i].imported_width;
-		uint height = state.layers[i].imported_height;
+		uint32_t width = state.layers[i].imported_width;
+		uint32_t height = state.layers[i].imported_height;
 
 		if(!state.layers[i].present) continue;
 

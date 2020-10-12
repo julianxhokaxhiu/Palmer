@@ -19,6 +19,6 @@
 
 #include "palmer.h"
 
-void read_layers(uint iterator, uint size);
+void read_layers(uint32_t iterator, uint32_t size);
 
 #endif

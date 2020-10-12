@@ -23,24 +23,24 @@
 void make_path(char *name)
 {
 	char *next = name;
-	
+
 	while((next = strchr(next, '/')))
 	{
 		char tmp[128];
-		
+
 		while(next[0] == '/') next++;
-		
+
 		strncpy(tmp, name, next - name);
 		tmp[next - name] = 0;
-		
+
 		mkdir(tmp);
 	}
 }
 
-bool write_png(char *filename, uint width, uint height, char *data)
+bool write_png(char *filename, uint32_t width, uint32_t height, char *data)
 {
-	uint y;
-	png_byte **rowptrs;
+	uint32_t y;
+	png_bytepp rowptrs;
 	FILE *f;
 	png_infop info_ptr;
 	png_structp png_ptr;
@@ -50,40 +50,40 @@ bool write_png(char *filename, uint width, uint height, char *data)
 		printf("couldn't open file %s for writing: %s", filename, _strerror(NULL));
 		return false;
 	}
-	
+
 	png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, (png_voidp)0, 0, 0);
-	
+
 	if(!png_ptr)
 	{
 		fclose(f);
 		return false;
 	}
-	
+
 	info_ptr = png_create_info_struct(png_ptr);
-	
+
 	if(!info_ptr)
 	{
 		png_destroy_write_struct(&png_ptr, (png_infopp)NULL);
 		fclose(f);
 		return false;
 	}
-	
+
 	png_init_io(png_ptr, f);
-	
+
 	png_set_compression_level(png_ptr, 1);
-	
+
 	png_set_IHDR(png_ptr, info_ptr, width, height, 8, PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
-	
-	rowptrs = malloc(height * 4);
-	
-	for(y = 0; y < height; y++) rowptrs[y] = &data[y * width * 4];
-	
+
+	rowptrs = (png_bytepp)malloc(height * 4);
+
+	for(y = 0; y < height; y++) rowptrs[y] = (png_bytep)&data[y * width * 4];
+
 	png_set_rows(png_ptr, info_ptr, rowptrs);
-	
+
 	png_write_png(png_ptr, info_ptr, 0, NULL);
-	
+
 	png_destroy_write_struct(&png_ptr, &info_ptr);
-	
+
 	free(rowptrs);
 
 	fclose(f);
@@ -119,21 +119,21 @@ bool export_png(char *name, bool fullpath)
 
 	for(i = 0; i < EXPORT_LAYERS; i++)
 	{
-		uint *pixels;
+		uint32_t *pixels;
 		char filename[4096];
 
 		if(!state.export_layers[i]) continue;
 
-		pixels = calloc(width * height, 4);
+		pixels = (uint32_t*)calloc(width * height, 4);
 
 		for(j = 0; j < width / 16; j++)
 		{
 			for(k = 0; k < height / 16; k++)
 			{
-				uint x = 64 + (j * 16 + extents[0]) / 16;
-				uint y = 64 + (k * 16 + extents[2]) / 16;
+				uint32_t x = 64 + (j * 16 + extents[0]) / 16;
+				uint32_t y = 64 + (k * 16 + extents[2]) / 16;
 				struct layer_tile *tile = state.export_layers[i][x * 128 + y];
-				uint page, palette_index, src_x, src_y;
+				uint32_t page, palette_index, src_x, src_y;
 
 				if(!tile) continue;
 
@@ -153,17 +153,17 @@ bool export_png(char *name, bool fullpath)
 				}
 
 				if(state.layers[page].type == 1 && tile->palette_index >= state.palettes_num) continue;
-				
+
 				for(l = 0; l < state.export_tile_size; l++)
 				{
 					for(m = 0; m < state.export_tile_size; m++)
 					{
-						uint color;
+						uint32_t color;
 
 						if(state.layers[page].type == 1)
 						{
-							unsigned char pixel = ((unsigned char *)state.layers[page].data)[src_x + l + (src_y + m) * 256];
-							word pal_color = state.palettes[palette_index][pixel];
+							uint8_t pixel = ((uint8_t *)state.layers[page].data)[src_x + l + (src_y + m) * 256];
+							uint16_t pal_color = state.palettes[palette_index][pixel];
 
 							if(state.colorkey[palette_index] && pixel == 0) color = 0;
 							else
@@ -179,7 +179,7 @@ bool export_png(char *name, bool fullpath)
 
 						if(state.layers[page].type == 2)
 						{
-							word pal_color = ((word *)state.layers[page].data)[src_x + l + (src_y + m) * 256];
+							uint16_t pal_color = ((uint16_t *)state.layers[page].data)[src_x + l + (src_y + m) * 256];
 
 							if(pal_color == 0) color = 0;
 							else

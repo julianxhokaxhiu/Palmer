@@ -57,16 +57,16 @@ int anim_menus[64];
 
 void rebuild_util_menu(void)
 {
-	uint i;
-	uint j;
-	uint x;
+	uint32_t i;
+	uint32_t j;
+	uint32_t x;
 	char tmp[1024];
 
 	if(util_menu == 0)
 	{
 		util_menu = glutCreateMenu(layer_menu_cb);
 		glutAttachMenu(GLUT_RIGHT_BUTTON);
-		
+
 		layer_menu = glutCreateMenu(layer_menu_cb);
 		glutAddMenuEntry("Normal Layer", 0);
 		glutAddMenuEntry("dummy", -1);
@@ -78,7 +78,7 @@ void rebuild_util_menu(void)
 		for(x = 0; x < 7; x++)
 		{
 			anim_menu[x] = glutCreateMenu(anim_menu_cb);
-			
+
 			for(i = x * 10 + 1; i < (x + 1) * 10 + 1 && i < 64; i++)
 			{
 				anim_menus[i] = glutCreateMenu(anim_menu_cb);
@@ -115,7 +115,7 @@ void rebuild_util_menu(void)
 				glutChangeToSubMenu(i - 10 * x, tmp, anim_menus[i]);
 
 				glutSetMenu(anim_menus[i]);
-				
+
 				for(j = 0; j < 8; j++)
 				{
 					if(state.used_anim_state[i] & (1 << j))

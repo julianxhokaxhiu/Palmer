@@ -28,14 +28,14 @@
 #include "import.h"
 
 void *old_buffer = 0;
-uint old_buffer_end;
+uint32_t old_buffer_end;
 
 void *malloc_read(FILE *f, int size)
 {
-	char *ret = malloc(size);
+	char *ret = (char*)malloc(size);
 	char *data = ret;
 	int res;
-	
+
 	do
 	{
 		res = fread(data, 1, size, f);
@@ -46,23 +46,23 @@ void *malloc_read(FILE *f, int size)
 		}
 		else return ret;
 	} while(size);
-	
+
 	return ret;
 }
 
-uint unpack_lzs(uint source, uint dest, uint real_source_end)
+uint32_t unpack_lzs(uint32_t source, uint32_t dest, uint32_t real_source_end)
 {
-	uint bit_counter; // [sp+14h] [bp-Ch]@1
-	uint source_end; // [sp+Ch] [bp-14h]@1
-	uint dest_start; // [sp+4h] [bp-1Ch]@1
-	uint block_byte; // [sp+18h] [bp-8h]@5
-	uint v7; // [sp+8h] [bp-18h]@12
-	uint v8; // [sp+10h] [bp-10h]@12
-	uint reference_out_end; // [sp+0h] [bp-20h]@12
-	uint reference_in; // [sp+1Ch] [bp-4h]@12
+	uint32_t bit_counter; // [sp+14h] [bp-Ch]@1
+	uint32_t source_end; // [sp+Ch] [bp-14h]@1
+	uint32_t dest_start; // [sp+4h] [bp-1Ch]@1
+	uint32_t block_byte; // [sp+18h] [bp-8h]@5
+	uint32_t v7; // [sp+8h] [bp-18h]@12
+	uint32_t v8; // [sp+10h] [bp-10h]@12
+	uint32_t reference_out_end; // [sp+0h] [bp-20h]@12
+	uint32_t reference_in; // [sp+1Ch] [bp-4h]@12
 
 	bit_counter = 0;
-	source_end = source + *(uint *)source + 3;
+	source_end = source + *(uint32_t *)source + 3;
 	source += 4;
 	dest_start = dest;
 
@@ -78,14 +78,14 @@ uint unpack_lzs(uint source, uint dest, uint real_source_end)
 		{
 			bit_counter = 8;
 			if(source >= source_end) return dest - dest_start;
-			block_byte = *(unsigned char *)source++;
+			block_byte = *(uint8_t *)source++;
 		}
 
 		if(!(block_byte & 1)) break;
 
 		if(source >= source_end) return dest - dest_start;
 
-		*(unsigned char *)dest++ = *(unsigned char *)source++;
+		*(uint8_t *)dest++ = *(uint8_t *)source++;
 
 LABEL_17:
 		block_byte >>= 1;
@@ -94,39 +94,39 @@ LABEL_17:
 
 	if(source < (unsigned int)source_end)
 	{
-		v7 = *(unsigned char *)source++;
-		v8 = *(unsigned char *)source++;
-		v7 |= 16 * (unsigned char)(v8 & 0xF0);
+		v7 = *(uint8_t *)source++;
+		v8 = *(uint8_t *)source++;
+		v7 |= 16 * (uint8_t)(v8 & 0xF0);
 		reference_out_end = dest + (v8 & 0xF) + 3;
 		reference_in = dest - ((dest - dest_start - (v7 - 4078)) & 0xFFF);
 
 		while(reference_in < dest_start)
 		{
-			*(unsigned char *)dest++ = 0;
+			*(uint8_t *)dest++ = 0;
 			++reference_in;
 		}
 
-		while(dest < reference_out_end) *(unsigned char *)dest++ = *(unsigned char *)reference_in++;
-		
+		while(dest < reference_out_end) *(uint8_t *)dest++ = *(uint8_t *)reference_in++;
+
 		goto LABEL_17;
 	}
 
 	return dest - dest_start;
 }
 
-void parse_field_file(void *buffer, uint buffer_end)
+void parse_field_file(void *buffer, uint32_t buffer_end)
 {
-	struct field_header *header = buffer;
-	uint section3_iterator;
-	uint section8_iterator;
-	uint section3_size;
-	uint section8_size;
-	uint i;
+	struct field_header *header = (struct field_header *)buffer;
+	uint32_t section3_iterator;
+	uint32_t section8_iterator;
+	uint32_t section3_size;
+	uint32_t section8_size;
+	uint32_t i;
 
-	section3_iterator = header->section3 + (uint)buffer;
-	section8_iterator = header->section8 + (uint)buffer;
+	section3_iterator = header->section3 + (uint32_t)buffer;
+	section8_iterator = header->section8 + (uint32_t)buffer;
 
-	if(section3_iterator < (uint)buffer || section3_iterator > buffer_end || section8_iterator < (uint)buffer || section8_iterator > buffer_end)
+	if(section3_iterator < (uint32_t)buffer || section3_iterator > buffer_end || section8_iterator < (uint32_t)buffer || section8_iterator > buffer_end)
 	{
 		MessageBoxA(0, "Bad sections, not going to read this file.", "Error", 0);
 		return;
@@ -175,7 +175,7 @@ void read_field_file(char *file)
 	int size;
 	void *buffer;
 	struct field_header *header;
-	
+
 	if(stat(file, &s))
 	{
 		MessageBoxA(0, "Couldn't find file!", "Error", 0);
@@ -200,15 +200,15 @@ void read_field_file(char *file)
 
 	buffer = malloc_read(f, size);
 
-	header = buffer;
+	header = (struct field_header *)buffer;
 
 	if(header->unknown != 0 || header->sections != 9 || header->section0 != 0x2A)
 	{
 		void *buffer2;
-		
+
 		size *= 10;
 		buffer2 = malloc(size);
-		if(!(size = unpack_lzs((uint)buffer, (uint)buffer2, (uint)buffer + size / 10)))
+		if(!(size = unpack_lzs((uint32_t)buffer, (uint32_t)buffer2, (uint32_t)buffer + size / 10)))
 		{
 			free(buffer2);
 		}
@@ -217,19 +217,19 @@ void read_field_file(char *file)
 			free(buffer);
 			buffer = buffer2;
 
-			header = buffer;
+			header = (struct field_header *)buffer;
 		}
 
 		if(header->unknown != 0 || header->sections != 9 || header->section0 != 0x2A)
 		{
-			uint ret = MessageBoxA(0, "This doesn't look like a field file. Open anyway?", "Warning", MB_ICONWARNING | MB_OKCANCEL);
+			uint32_t ret = MessageBoxA(0, "This doesn't look like a field file. Open anyway?", "Warning", MB_ICONWARNING | MB_OKCANCEL);
 
-			if(ret != IDCANCEL) parse_field_file(buffer, (uint)buffer + size);
+			if(ret != IDCANCEL) parse_field_file(buffer, (uint32_t)buffer + size);
 			else free(buffer);
 		}
-		else parse_field_file(buffer, (uint)buffer + size);
+		else parse_field_file(buffer, (uint32_t)buffer + size);
 	}
-	else parse_field_file(buffer, (uint)buffer + size);
+	else parse_field_file(buffer, (uint32_t)buffer + size);
 
 	if(state.palettes_ok && state.layers_ok)
 	{

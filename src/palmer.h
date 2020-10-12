@@ -17,15 +17,12 @@
 #ifndef _PALMER_H_
 #define _PALMER_H_
 
+#include <stdint.h>
 #include <windows.h>
 #include <gl/gl.h>
 #include <stdlib.h>
 
 #pragma pack(1)
-
-typedef unsigned short word;
-typedef unsigned int uint;
-typedef unsigned int bool;
 
 #define true 1
 #define false 0
@@ -44,93 +41,93 @@ void rebuild_util_menu(void);
 
 struct field_header
 {
-	word unknown;
-	uint sections;
-	uint section0;
-	uint section1;
-	uint section2;
-	uint section3;
-	uint section4;
-	uint section5;
-	uint section6;
-	uint section7;
-	uint section8;
+	uint16_t unknown;
+	uint32_t sections;
+	uint32_t section0;
+	uint32_t section1;
+	uint32_t section2;
+	uint32_t section3;
+	uint32_t section4;
+	uint32_t section5;
+	uint32_t section6;
+	uint32_t section7;
+	uint32_t section8;
 };
 
 struct layer
 {
-	word present;
-	word unknown1;
-	word type;
+	uint16_t present;
+	uint16_t unknown1;
+	uint16_t type;
 	void *data;
 	GLuint textures[PALETTES];
-	uint imported_width;
-	uint imported_height;
-	uint *imported_data;
+	uint32_t imported_width;
+	uint32_t imported_height;
+	uint32_t *imported_data;
 };
 
 struct layer_tile
 {
 	short x;
 	short y;
-	word unknown1;
-	word unknown2;
-	word source_x;
-	word source_y;
-	word fx_source_x;
-	word fx_source_y;
-	word tile_size_x;
-	word tile_size_y;
-	word palette_index;
-	word flags;
-	unsigned char anim_group;
-	unsigned char anim_bitmask;
-	unsigned char use_fx_page;
-	unsigned char unused1;
-	word blend_mode;
-	word source_page;
-	word fx_page;
-	word unknown4;
-	uint fixed_z;
-	uint fixed_u;
-	uint fixed_v;
-	word unused2;
-	word unused3;
+	uint16_t unknown1;
+	uint16_t unknown2;
+	uint16_t source_x;
+	uint16_t source_y;
+	uint16_t fx_source_x;
+	uint16_t fx_source_y;
+	uint16_t tile_size_x;
+	uint16_t tile_size_y;
+	uint16_t palette_index;
+	uint16_t flags;
+	uint8_t anim_group;
+	uint8_t anim_bitmask;
+	uint8_t use_fx_page;
+	uint8_t unused1;
+	uint16_t blend_mode;
+	uint16_t source_page;
+	uint16_t fx_page;
+	uint16_t unknown4;
+	uint32_t fixed_z;
+	uint32_t fixed_u;
+	uint32_t fixed_v;
+	uint16_t unused2;
+	uint16_t unused3;
 };
 
 struct field_state
 {
-	uint layer1_width;
-	uint layer1_height;
-	uint layer1_tiles_num;
+	uint32_t layer1_width;
+	uint32_t layer1_height;
+	uint32_t layer1_tiles_num;
 	struct layer_tile *layer1_tiles;
-	uint layer2_width;
-	uint layer2_height;
+	uint32_t layer2_width;
+	uint32_t layer2_height;
 	bool layer2_present;
-	uint layer2_tiles_num;
+	uint32_t layer2_tiles_num;
 	struct layer_tile *layer2_tiles;
-	uint layer3_width;
-	uint layer3_height;
+	uint32_t layer3_width;
+	uint32_t layer3_height;
 	bool layer3_present;
-	uint layer3_tiles_num;
+	uint32_t layer3_tiles_num;
 	struct layer_tile *layer3_tiles;
-	uint layer4_width;
-	uint layer4_height;
+	uint32_t layer4_width;
+	uint32_t layer4_height;
 	bool layer4_present;
-	uint layer4_tiles_num;
+	uint32_t layer4_tiles_num;
 	struct layer_tile *layer4_tiles;
 	char colorkey[PALETTES];
 	struct layer layers[FF7_LAYERS];
 	bool parallax_back;
 	bool parallax_front;
 	volatile bool layers_ok ;
-	word *palettes[PALETTES];
-	uint palettes_num;
-	uint palette_colors;
+	uint16_t *palettes[PALETTES];
+	uint32_t palettes_num;
+	uint32_t palette_colors;
 	volatile bool palettes_ok;
 	int current_layer;
-	uint used_anim_state[64];
-	uint anim_state[64];
+	uint32_t used_anim_state[64];
+	uint32_t anim_state[64];
 	int x_offset;
 	int y_offset;
 	int scale;

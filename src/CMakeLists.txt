@@ -29,7 +29,7 @@ else()
 endif()
 
 # Include all the source code files
-file(GLOB_RECURSE source_files "*.c")
+file(GLOB_RECURSE source_files "*.cpp")
 
 configure_file(
   ../misc/version.rc.in

@@ -37,9 +37,9 @@ struct field_state state;
 
 HKEY ff7_regkey;
 char filename[4096];
-uint filename_length = sizeof(filename);
+uint32_t filename_length = sizeof(filename);
 char basedir[4096];
-uint basedir_length = sizeof(basedir);
+DWORD basedir_length = sizeof(basedir);
 
 #pragma pack(1)
 
@@ -151,7 +151,7 @@ void main_menu_cb(int entry)
 			dialog = true;
 			if(GetOpenFileName(&ofn))
 			{
-				uint saved_layer = state.current_layer;
+				uint32_t saved_layer = state.current_layer;
 
 				state.current_layer = 0;
 				gl_render_scene();
@@ -178,7 +178,7 @@ void main_menu_cb(int entry)
 			dialog = true;
 			if(GetSaveFileName(&ofn))
 			{
-				uint saved_layer = state.current_layer;
+				uint32_t saved_layer = state.current_layer;
 
 				state.current_layer = 0;
 				gl_render_scene();
@@ -201,10 +201,10 @@ void main_menu_cb(int entry)
 			for(i = 1; i < __argc; i++)
 			{
 				read_field_file(__argv[i]);
-				
+
 				if(state.palettes_ok && state.layers_ok)
 				{
-					uint saved_layer = state.current_layer;
+					uint32_t saved_layer = state.current_layer;
 
 					state.current_layer = 0;
 					gl_render_scene();
@@ -248,10 +248,10 @@ void main_menu_cb(int entry)
 			for(i = 1; i < __argc; i++)
 			{
 				read_field_file(__argv[i]);
-				
+
 				if(state.palettes_ok && state.layers_ok)
 				{
-					uint saved_layer = state.current_layer;
+					uint32_t saved_layer = state.current_layer;
 
 					state.current_layer = 0;
 					gl_render_scene();
@@ -300,7 +300,7 @@ void main_menu_cb(int entry)
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	RegOpenKeyEx(HKEY_LOCAL_MACHINE, "SOFTWARE\\Square Soft, Inc.\\Final Fantasy VII", 0, KEY_QUERY_VALUE, &ff7_regkey);
-	RegQueryValueEx(ff7_regkey, "AppPath", 0, 0, basedir, &basedir_length);
+	RegQueryValueEx(ff7_regkey, "AppPath", 0, 0, (LPBYTE)basedir, &basedir_length);
 	basedir[sizeof(basedir) - 1] = 0;
 
 	glutInit(&__argc, __argv);

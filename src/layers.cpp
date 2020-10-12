@@ -26,62 +26,62 @@
 
 struct section8_header
 {
-	word unused1;
-	word unknown1;
-	unsigned char layer1_present;
+	uint16_t unused1;
+	uint16_t unknown1;
+	uint8_t layer1_present;
 	char unused2[7];
 	char colorkey[20];
-	word unused3;
-	word unused4;
+	uint16_t unused3;
+	uint16_t unused4;
 	char unused5[4];
-	word width;
-	word height;
-	word layer1_tiles;
-	word unknown3;
-	word unused6;
-	word unused7;
+	uint16_t width;
+	uint16_t height;
+	uint16_t layer1_tiles;
+	uint16_t unknown3;
+	uint16_t unused6;
+	uint16_t unused7;
 };
 
 struct layer2_header
 {
-	word width;
-	word height;
-	word layer2_tiles;
-	word unknown1;
-	word unknown2;
-	word layer2_start_page;
-	word layer2_end_page;
-	word unknown5;
-	word unknown6;
-	word unknown7;
-	word unknown8;
-	word unused1;
-	word unused2;
+	uint16_t width;
+	uint16_t height;
+	uint16_t layer2_tiles;
+	uint16_t unknown1;
+	uint16_t unknown2;
+	uint16_t layer2_start_page;
+	uint16_t layer2_end_page;
+	uint16_t unknown5;
+	uint16_t unknown6;
+	uint16_t unknown7;
+	uint16_t unknown8;
+	uint16_t unused1;
+	uint16_t unused2;
 };
 
 struct layer3_header
 {
-	word width;
-	word height;
-	word layer3_tiles;
-	word unknown1;
-	word layer3_start_page;
-	word layer3_end_page;
-	word unknown4;
-	word unknown5;
-	word unused1;
-	word unused2;
+	uint16_t width;
+	uint16_t height;
+	uint16_t layer3_tiles;
+	uint16_t unknown1;
+	uint16_t layer3_start_page;
+	uint16_t layer3_end_page;
+	uint16_t unknown4;
+	uint16_t unknown5;
+	uint16_t unused1;
+	uint16_t unused2;
 };
 
-void read_layers(uint iterator, uint size)
+void read_layers(uint32_t iterator, uint32_t size)
 {
-	uint i;
-	uint section_end = iterator + size;
+	uint32_t i;
+	uint32_t section_end = iterator + size;
 	struct section8_header header;
 	struct layer2_header layer2_header;
 	struct layer3_header layer3_header;
 	struct layer3_header layer4_header;
-	unsigned char *tmp;
+	uint8_t *tmp;
 
 	section_read_bytes(&iterator, &header, sizeof(header));
 
@@ -146,7 +146,7 @@ void read_layers(uint iterator, uint size)
 
 	iterator += 7;
 
-	tmp = malloc(256 * 256 * 4);
+	tmp = (uint8_t*)malloc(256 * 256 * 4);
 
 	for(i = 0; i < 42; i++)
 	{
@@ -159,7 +159,7 @@ void read_layers(uint iterator, uint size)
 
 		if(state.layers[i].type == 1)
 		{
-			uint j, k;
+			uint32_t j, k;
 
 			state.layers[i].data = (void *)iterator;
 			iterator += 256 * 256;
@@ -170,8 +170,8 @@ void read_layers(uint iterator, uint size)
 			{
 				for(j = 0; j < 256 * 256; j++)
 				{
-					unsigned char pixel = ((unsigned char *)state.layers[i].data)[j];
-					word color = state.palettes[k][pixel];
+					uint8_t pixel = ((uint8_t *)state.layers[i].data)[j];
+					uint16_t color = state.palettes[k][pixel];
 
 					if(!color) color = state.palettes[k][0];
 
@@ -190,14 +190,14 @@ void read_layers(uint iterator, uint size)
 
 		if(state.layers[i].type == 2)
 		{
-			uint j;
+			uint32_t j;
 
 			state.layers[i].data = (void *)iterator;
 			iterator += 256 * 256 * 2;
 
 			for(j = 0; j < 256 * 256; j++)
 			{
-				word color = ((word *)state.layers[i].data)[j];
+				uint16_t color = ((uint16_t *)state.layers[i].data)[j];
 				tmp[j * 4 + 0] = (((color & 0xF800) >> 11) * 255) / 31;
 				tmp[j * 4 + 1] = (((color & 0x07E0) >> 5) * 255) / 63;
 				tmp[j * 4 + 2] = (((color & 0x001F) >> 0) * 255) / 31;

@@ -16,4 +16,4 @@
 
 #include "palmer.h"
 
-void read_palettes(uint iterator, uint size);
+void read_palettes(uint32_t iterator, uint32_t size);

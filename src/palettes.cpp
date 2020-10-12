@@ -23,17 +23,17 @@
 
 struct section3_header
 {
-	uint size;
-	word unknown1;
-	word unknown2;
-	word palette_colors;
-	word palettes;
+	uint32_t size;
+	uint16_t unknown1;
+	uint16_t unknown2;
+	uint16_t palette_colors;
+	uint16_t palettes;
 };
 
-void read_palettes(uint iterator, uint size)
+void read_palettes(uint32_t iterator, uint32_t size)
 {
-	uint i;
-	uint section_end = iterator + size;
+	uint32_t i;
+	uint32_t section_end = iterator + size;
 	struct section3_header header;
 
 	section_read_bytes(&iterator, &header, sizeof(header));
@@ -43,7 +43,7 @@ void read_palettes(uint iterator, uint size)
 
 	for(i = 0; i < header.palettes; i++)
 	{
-		state.palettes[i] = (word *)iterator;
+		state.palettes[i] = (uint16_t *)iterator;
 		iterator += header.palette_colors * 2;
 	}
 
