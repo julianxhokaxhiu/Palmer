@@ -52,14 +52,14 @@ void *malloc_read(FILE *f, int size)
 
 uint32_t unpack_lzs(uint32_t source, uint32_t dest, uint32_t real_source_end)
 {
-	uint32_t bit_counter; // [sp+14h] [bp-Ch]@1
-	uint32_t source_end; // [sp+Ch] [bp-14h]@1
-	uint32_t dest_start; // [sp+4h] [bp-1Ch]@1
-	uint32_t block_byte; // [sp+18h] [bp-8h]@5
-	uint32_t v7; // [sp+8h] [bp-18h]@12
-	uint32_t v8; // [sp+10h] [bp-10h]@12
-	uint32_t reference_out_end; // [sp+0h] [bp-20h]@12
-	uint32_t reference_in; // [sp+1Ch] [bp-4h]@12
+	uint32_t bit_counter;
+	uint32_t source_end;
+	uint32_t dest_start;
+	uint32_t block_byte;
+	uint32_t v7;
+	uint32_t v8;
+	uint32_t reference_out_end;
+	uint32_t reference_in;
 
 	bit_counter = 0;
 	source_end = source + *(uint32_t *)source + 3;
