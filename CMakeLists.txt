@@ -100,11 +100,20 @@ add_custom_command(
   COMMAND ${CMAKE_COMMAND} -E copy
           ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${RELEASE_NAME}.exe
           ${CMAKE_BINARY_DIR}/bin
+)
+
+if(CMAKE_BUILD_TYPE MATCHES Debug OR CMAKE_BUILD_TYPE MATCHES RelWithDebInfo)
+add_custom_command(
+  TARGET ${RELEASE_NAME}
+  POST_BUILD
+  # ensure bin directory exists
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/bin
   # .pdb
   COMMAND ${CMAKE_COMMAND} -E copy
           ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${RELEASE_NAME}.pdb
           ${CMAKE_BINARY_DIR}/bin
 )
+endif()
 
 # CPU INFO
 add_custom_command(
