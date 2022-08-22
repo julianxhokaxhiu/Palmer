@@ -8,7 +8,7 @@
       "name": "(Windows) Launch",
       "type": "cppvsdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/.dist/build/x86-RelWithDebInfo/bin/Palmer.exe",
+      "program": "${workspaceFolder}/.build/bin/Palmer.exe",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
