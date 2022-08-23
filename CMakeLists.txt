@@ -28,6 +28,9 @@ set(VCPKG_DISABLE_COMPILER_TRACKING 1)
 set(VCPKG_INSTALL_OPTIONS "--clean-after-build" "--x-use-aria2")
 set(VCPKG_TARGET_TRIPLET x86-windows-static)
 
+# Currently missing by default, port bug?
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_BINARY_DIR}/vcpkg_installed/x86-windows-static/share/freeglut")
+
 set(CMAKE_SHARED_LINKER_FLAGS
   "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:MSVCRT /NODEFAULTLIB:MSVCRTD /DEBUG:FULL /FORCE:MULTIPLE /IGNORE:4006,4075,4099,4217"
 )
@@ -42,7 +45,7 @@ endif()
 
 project(Palmer)
 
-find_package(GLUT REQUIRED)
+find_package(FreeGLUT CONFIG REQUIRED)
 find_package(GLEW CONFIG REQUIRED)
 find_package(libpng CONFIG REQUIRED)
 find_package(mimalloc CONFIG REQUIRED)
@@ -72,7 +75,7 @@ target_link_libraries(
 	dbghelp
   mimalloc-static
   png_static
-	GLUT::GLUT
+	FreeGLUT::freeglut_static
 	GLEW::glew_s
 )
 target_compile_options(
