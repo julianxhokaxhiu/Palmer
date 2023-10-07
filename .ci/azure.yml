@@ -1,6 +1,6 @@
 #*****************************************************************************#
 #    Copyright (C) 2014 Aali132                                               #
-#    Copyright (C) 2022 Julian Xhokaxhiu                                      #
+#    Copyright (C) 2023 Julian Xhokaxhiu                                      #
 #                                                                             #
 #    This file is part of Palmer                                              #
 #                                                                             #
