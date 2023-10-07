@@ -1,0 +1,95 @@
+﻿{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 25,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "generator": "Visual Studio 17 2022",
+      "environment": {
+        "VCPKG_ROOT": "C:/vcpkg"
+      },
+      "architecture": {
+        "value": "win32",
+        "strategy": "set"
+      },
+      "toolset": {
+        "value": "host=x86",
+        "strategy": "set"
+      },
+      "binaryDir": "${sourceDir}/.build",
+      "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+      "cacheVariables": {
+        "_EXE_VERSION": "devel",
+        "CMAKE_C_COMPILER": "cl",
+        "VCPKG_DISABLE_COMPILER_TRACKING": true,
+        "VCPKG_FEATURE_FLAGS": "versions",
+        "VCPKG_TARGET_TRIPLET": "x86-windows-static"
+      }
+    },
+    {
+      "name": "Debug",
+      "inherits": "base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "RelWithDebInfo",
+      "inherits": "base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      }
+    },
+    {
+      "name": "MinSizeRel",
+      "inherits": "base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "MinSizeRel"
+      }
+    },
+    {
+      "name": "Release",
+      "inherits": "base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "Debug",
+      "displayName": "Default",
+      "configurePreset": "Debug",
+      "configuration": "Debug"
+    },
+    {
+      "name": "RelWithDebInfo",
+      "displayName": "Default",
+      "configurePreset": "RelWithDebInfo",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "MinSizeRel",
+      "displayName": "Default",
+      "configurePreset": "MinSizeRel",
+      "configuration": "MinSizeRel"
+    },
+    {
+      "name": "Release",
+      "displayName": "Default",
+      "configurePreset": "Release",
+      "configuration": "Release"
+    }
+  ],
+  "vendor": {
+    "microsoft.com/VisualStudioSettings/CMake/1.0": {
+      "hostOS": "Windows",
+      "intelliSenseMode": "windows-msvc-x64"
+    }
+  }
+}
