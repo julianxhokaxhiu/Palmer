@@ -34,6 +34,19 @@ Once the project is build you can find the output in this path: `.build/bin`
 1. Go inside the `C:\vcpkg` folder and double click `bootstrap-vcpkg.bat`
 2. Open a `cmd` window in `C:\vcpkg` and run the following command: `vcpkg integrate install`
 
+### OPTIONAL: NuGet
+
+> **Please note:**
+>
+> This step is completely optional but you can make use of it if you prefer to use your own Github Free package registry plan.
+
+0. Make sure you have [NuGet CLI installed](https://learn.microsoft.com/en-us/nuget/install-nuget-client-tools?tabs=windows#install-nugetexe).
+1. [Create a Personal Access token ( classic )](https://github.com/settings/tokens/new) with the `write:packages` permission.
+2. Open a `cmd` window and run the following command ( replace `YOUR_GITHUB_USERNAME` and `YOUR_GITHUB_PAT` accordingly ):
+```pwsh
+nuget sources add -Name github -Source "https://nuget.pkg.github.com/YOUR_GITHUB_USERNAME/index.json" -Username YOUR_GITHUB_USERNAME -Password YOUR_GITHUB_PAT -StorePasswordInClearText
+```
+
 ### Visual Studio
 
 > **Please note:**
