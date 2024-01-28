@@ -10,9 +10,6 @@
       "name": "base",
       "hidden": true,
       "generator": "Visual Studio 17 2022",
-      "environment": {
-        "VCPKG_ROOT": "C:/vcpkg"
-      },
       "architecture": {
         "value": "win32",
         "strategy": "set"
@@ -21,21 +18,23 @@
         "value": "host=x86",
         "strategy": "set"
       },
+      "environment": {
+        "VCPKG_ROOT": "C:/vcpkg",
+        "VCPKG_BINARY_SOURCES": "clear;nuget,github,readwrite"
+      },
       "binaryDir": "${sourceDir}/.build",
       "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
       "cacheVariables": {
         "_EXE_VERSION": "devel",
         "CMAKE_C_COMPILER": "cl",
-        "VCPKG_DISABLE_COMPILER_TRACKING": true,
-        "VCPKG_FEATURE_FLAGS": "versions",
         "VCPKG_TARGET_TRIPLET": "x86-windows-static"
       }
     },
     {
-      "name": "Debug",
+      "name": "Release",
       "inherits": "base",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug"
+        "CMAKE_BUILD_TYPE": "Release"
       }
     },
     {
@@ -46,26 +45,26 @@
       }
     },
     {
+      "name": "Debug",
+      "inherits": "base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
       "name": "MinSizeRel",
       "inherits": "base",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "MinSizeRel"
       }
-    },
-    {
-      "name": "Release",
-      "inherits": "base",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release"
-      }
     }
   ],
   "buildPresets": [
     {
-      "name": "Debug",
+      "name": "Release",
       "displayName": "Default",
-      "configurePreset": "Debug",
-      "configuration": "Debug"
+      "configurePreset": "Release",
+      "configuration": "Release"
     },
     {
       "name": "RelWithDebInfo",
@@ -74,16 +73,16 @@
       "configuration": "RelWithDebInfo"
     },
     {
+      "name": "Debug",
+      "displayName": "Default",
+      "configurePreset": "Debug",
+      "configuration": "Debug"
+    },
+    {
       "name": "MinSizeRel",
       "displayName": "Default",
       "configurePreset": "MinSizeRel",
       "configuration": "MinSizeRel"
-    },
-    {
-      "name": "Release",
-      "displayName": "Default",
-      "configurePreset": "Release",
-      "configuration": "Release"
     }
   ],
   "vendor": {
