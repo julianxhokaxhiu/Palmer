@@ -29,10 +29,10 @@ elseif ($env:_BUILD_BRANCH -like "refs/tags/*")
 }
 $env:_RELEASE_VERSION = "v${env:_BUILD_VERSION}"
 
-$vcpkgRoot = "C:\vcpkg"
+$vcpkgRoot = ".\vcpkg"
 $vcpkgBaseline = [string](jq --arg baseline "builtin-baseline" -r '.[$baseline]' vcpkg.json)
 $vcpkgOriginUrl = &"git" -C $vcpkgRoot remote get-url origin
-$vcpkgBranchName = &"git" -C $vcpkgRoot branch --show-current
+$vcpkgTagName = &"git" -C $vcpkgRoot describe --exact-match --tags
 
 $releasePath = [string](jq -r '.configurePresets[0].binaryDir' CMakePresets.json).Replace('${sourceDir}/', '')
 
@@ -40,7 +40,7 @@ Write-Output "--------------------------------------------------"
 Write-Output "BUILD CONFIGURATION: $env:_RELEASE_CONFIGURATION"
 Write-Output "RELEASE VERSION: $env:_RELEASE_VERSION"
 Write-Output "VCPKG ORIGIN: $vcpkgOriginUrl"
-Write-Output "VCPKG BRANCH: $vcpkgBranchName"
+Write-Output "VCPKG TAG: $vcpkgTagName"
 Write-Output "VCPKG BASELINE: $vcpkgBaseline"
 Write-Output "--------------------------------------------------"
 
@@ -49,20 +49,6 @@ Write-Output "_RELEASE_VERSION=${env:_RELEASE_VERSION}" >> ${env:GITHUB_ENV}
 Write-Output "_IS_BUILD_CANARY=${env:_IS_BUILD_CANARY}" >> ${env:GITHUB_ENV}
 Write-Output "_IS_GITHUB_RELEASE=${env:_IS_GITHUB_RELEASE}" >> ${env:GITHUB_ENV}
 Write-Output "_CHANGELOG_VERSION=${env:_CHANGELOG_VERSION}" >> ${env:GITHUB_ENV}
-
-# Install CMake
-Write-Output "Installing cmake v${env:_WINGET_CMAKE}..."
-winget install Kitware.CMake --version ${env:_WINGET_CMAKE} --silent --accept-source-agreements --accept-package-agreements --disable-interactivity | out-null
-cmake --version
-
-# Install Powershell
-Write-Output "Installing powershell v${env:_WINGET_POWERSHELL}..."
-winget install Microsoft.PowerShell --version ${env:_WINGET_POWERSHELL} --silent --accept-source-agreements --accept-package-agreements --disable-interactivity | out-null
-pwsh --version
-
-# Install Visual Studio Enterprise
-Write-Output "Installing VisualStudio 2022 Enterprise v${env:_WINGET_VS2022}..."
-winget install Microsoft.VisualStudio.2022.Enterprise --version ${env:_WINGET_VS2022} --silent --accept-source-agreements --accept-package-agreements --disable-interactivity | out-null
 
 # Load vcvarsall environment for x86
 $vcvarspath = &"${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -prerelease -latest -property InstallationPath
@@ -82,10 +68,6 @@ nuget setApiKey ${env:GITHUB_PACKAGES_PAT} -Source "https://nuget.pkg.github.com
 nuget sources list
 
 # Vcpkg setup
-git -C $vcpkgRoot pull --all
-git -C $vcpkgRoot checkout $vcpkgBaseline
-git -C $vcpkgRoot clean -fxd
-
 cmd.exe /c "call $vcpkgRoot\bootstrap-vcpkg.bat"
 
 vcpkg integrate install
