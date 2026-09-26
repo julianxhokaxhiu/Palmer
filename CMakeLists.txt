@@ -44,7 +44,7 @@ endif()
 
 project(Palmer)
 
-find_package(FreeGLUT CONFIG REQUIRED)
+find_package(GLUT REQUIRED)
 find_package(GLEW CONFIG REQUIRED)
 find_package(libpng CONFIG REQUIRED)
 find_package(mimalloc CONFIG REQUIRED)
@@ -74,7 +74,7 @@ target_link_libraries(
 	dbghelp
   mimalloc-static
   png_static
-	FreeGLUT::freeglut_static
+	GLUT::GLUT
 	GLEW::glew_s
 )
 target_compile_options(
